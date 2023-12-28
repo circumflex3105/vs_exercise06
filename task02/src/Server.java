@@ -1,0 +1,23 @@
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class Server {
+
+    public static void main(String[] args) {
+        FrueherkennungIF serverImplementierung = new FrueherkennungService();
+        try {
+            FrueherkennungIF stub = (FrueherkennungIF) UnicastRemoteObject.exportObject(serverImplementierung, 0); // Stub und Skeleton gebaut
+            Registry registry = LocateRegistry.createRegistry(1099);
+            registry.bind("Frueherkennungs-Dienst", stub);
+            System.out.println("Server hochgefahren, warte auf Anfragen");
+
+        } catch (RemoteException | AlreadyBoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}
